@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1216">
+  <title>カウンター</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Home画面 ===== -->
+  <main id="home" class="screen" hidden>
+    <div class="home-card">
+      <h1>カウンター</h1>
+
+      <label for="targetInput" class="field-label">目標値（0〜9999）</label>
+      <input id="targetInput" type="number" inputmode="numeric" min="0" max="9999" step="1" placeholder="例：100">
+      <p id="homeError" class="error" role="alert"></p>
+
+      <!-- 保存データがないとき -->
+      <div id="homeNew" class="home-actions">
+        <button id="startBtn" type="button" class="btn btn-primary btn-lg">カウント開始</button>
+      </div>
+
+      <!-- 保存データがあるとき -->
+      <div id="homeResume" class="home-actions" hidden>
+        <p class="saved-info">保存中のカウント：<strong id="savedCount"></strong>（目標 <span id="savedTarget"></span>）</p>
+        <button id="nextBtn" type="button" class="btn btn-primary btn-lg">次へ</button>
+        <p class="hint">カウント・ボタン・履歴を引き継いで、新しい目標値で続けます</p>
+        <button id="resetNextBtn" type="button" class="btn btn-danger-outline btn-lg">リセットして次へ</button>
+        <p class="hint">すべて削除して新しく始めます</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== カウント画面 ===== -->
+  <main id="counter" class="screen" hidden>
+    <section class="display-area">
+      <div id="segDisplay" class="seg-display" role="img" aria-label="0"></div>
+    </section>
+
+    <section class="info-area">
+      <p id="remaining" class="remaining" aria-live="polite"></p>
+      <div class="toolbar">
+        <button id="homeBtn" type="button" class="btn btn-sub">Home</button>
+        <button id="resetBtn" type="button" class="btn btn-sub">リセット</button>
+        <button id="csvBtn" type="button" class="btn btn-sub">CSVに書き出す</button>
+      </div>
+    </section>
+
+    <section class="buttons-area">
+      <div id="buttonList" class="button-list"></div>
+      <button id="addBtn" type="button" class="btn btn-add">＋ ボタンを追加</button>
+      <button id="undoBtn" type="button" class="btn btn-undo">↶ Undo（1つ戻る）</button>
+    </section>
+  </main>
+
+  <!-- ===== ボタン追加モーダル ===== -->
+  <dialog id="addDialog" class="modal">
+    <form id="addForm" novalidate>
+      <h2>ボタンを追加</h2>
+
+      <label class="field-label" for="addLabel">ラベル（12文字まで）</label>
+      <input id="addLabel" type="text" maxlength="12" placeholder="例：退室" autocomplete="off">
+
+      <div class="row2">
+        <div>
+          <label class="field-label" for="addSign">プラス／マイナス</label>
+          <select id="addSign">
+            <option value="1">＋（増やす）</option>
+            <option value="-1">－（減らす）</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="addValue">数値（1〜9999）</label>
+          <input id="addValue" type="number" inputmode="numeric" min="1" max="9999" step="1" value="1">
+        </div>
+      </div>
+
+      <p id="addError" class="error" role="alert"></p>
+
+      <div class="modal-actions">
+        <button type="button" id="addCancel" class="btn btn-sub">キャンセル</button>
+        <button type="submit" class="btn btn-primary">追加</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ===== 確認モーダル ===== -->
+  <dialog id="confirmDialog" class="modal">
+    <p id="confirmMsg"></p>
+    <div class="modal-actions">
+      <button type="button" id="confirmNo" class="btn btn-sub">キャンセル</button>
+      <button type="button" id="confirmYes" class="btn btn-danger">OK</button>
+    </div>
+  </dialog>
+
+  <!-- 紙吹雪 -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>

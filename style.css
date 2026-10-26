@@ -1,0 +1,237 @@
+:root {
+  --bg: #0f1216;
+  --panel: #171b21;
+  --panel2: #1f252d;
+  --text: #e8ecf1;
+  --muted: #9aa4b2;
+  --line: #2b323c;
+  --primary: #2f7cf6;
+  --minus: #c2410c;
+  --danger: #e5484d;
+  --error: #ff6b6b;
+  --seg-on: #ff4d3d;
+  --seg-off: rgba(255, 77, 61, 0.08);
+  --seg-glow: rgba(255, 77, 61, 0.55);
+  --ok: #30d158;
+  --ok-glow: rgba(48, 209, 88, 0.55);
+  --radius: 14px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Meiryo", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+[hidden] { display: none !important; }
+
+/* ---------- 共通部品 ---------- */
+.btn {
+  font: inherit;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform .06s, filter .15s, opacity .15s;
+}
+.btn:hover:not(:disabled) { filter: brightness(1.1); }
+.btn:active:not(:disabled) { transform: scale(.97); }
+.btn:disabled { opacity: .35; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #fff; font-weight: 700; }
+.btn-lg { padding: 16px; font-size: 1.1rem; }
+.btn-sub { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
+.btn-danger { background: var(--danger); color: #fff; font-weight: 700; }
+.btn-danger-outline { background: transparent; color: #ff8a8d; border: 1px solid var(--danger); font-weight: 700; }
+
+.field-label { display: block; font-size: .9rem; color: var(--muted); margin: 0 0 6px; }
+input, select {
+  width: 100%;
+  font: inherit;
+  font-size: 16px; /* iOSの自動ズーム防止 */
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+}
+input:focus, select:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+.error { color: var(--error); min-height: 1.4em; margin: 8px 0; font-size: .9rem; }
+
+/* ---------- Home画面 ---------- */
+#home {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+.home-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 24px;
+}
+.home-card h1 { margin: 0 0 20px; font-size: 1.6rem; text-align: center; }
+#targetInput { font-size: 1.6rem; text-align: center; font-variant-numeric: tabular-nums; }
+.home-actions { display: flex; flex-direction: column; gap: 6px; }
+.saved-info { text-align: center; margin: 0 0 12px; color: var(--muted); }
+.saved-info strong { color: var(--text); font-size: 1.1rem; }
+.hint { margin: 0 0 10px; font-size: .8rem; color: var(--muted); text-align: center; }
+
+/* ---------- カウント画面 ---------- */
+#counter {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* 7セグ表示：画面の縦1/3 */
+.display-area {
+  flex: 0 0 33.333vh;
+  flex-basis: 33.333dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #07090b;
+  border-bottom: 1px solid var(--line);
+  padding: 3vh 16px;
+  overflow: hidden;
+}
+.seg-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5%;
+  height: 100%;
+  width: 100%;
+  max-width: 900px;
+}
+.seg-display svg {
+  height: 100%;
+  width: auto;
+  max-width: 22%;
+  transform: skewX(-6deg);
+  overflow: visible;
+}
+.seg { fill: var(--seg-off); transition: fill .08s; }
+.seg.on { fill: var(--seg-on); filter: drop-shadow(0 0 4px var(--seg-glow)); }
+.seg-display.achieved .seg.on { fill: var(--ok); filter: drop-shadow(0 0 4px var(--ok-glow)); }
+
+.info-area { padding: 12px 16px 4px; max-width: 900px; width: 100%; margin: 0 auto; }
+.remaining {
+  text-align: center;
+  font-size: clamp(1.1rem, 4.5vw, 1.8rem);
+  font-weight: 700;
+  margin: 4px 0 12px;
+  font-variant-numeric: tabular-nums;
+}
+.remaining .num { color: var(--seg-on); }
+.remaining.achieved { color: var(--ok); }
+.toolbar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.toolbar .btn { padding: 10px 4px; font-size: clamp(.75rem, 3.4vw, .9rem); white-space: nowrap; }
+
+.buttons-area {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.button-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.btn-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 10px 10px 16px;
+}
+.row-label {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.count-btn {
+  min-width: 96px;
+  padding: 14px 18px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.count-btn.plus { background: var(--primary); }
+.count-btn.minus { background: var(--minus); }
+.del-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  flex: 0 0 auto;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 1.2rem;
+}
+.btn-add { background: transparent; border: 1px dashed var(--muted); color: var(--text); padding: 14px; }
+.btn-undo {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* ---------- モーダル ---------- */
+.modal {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 22px;
+  width: min(420px, calc(100vw - 32px));
+}
+.modal::backdrop { background: rgba(0, 0, 0, .6); }
+.modal h2 { margin: 0 0 16px; font-size: 1.2rem; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+#confirmMsg { white-space: pre-line; margin: 0 0 16px; line-height: 1.6; }
+
+/* ---------- 紙吹雪 ---------- */
+#confetti {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@media (max-width: 380px) {
+  .row2 { grid-template-columns: 1fr; }
+  .count-btn { min-width: 80px; padding: 12px 14px; }
+}
